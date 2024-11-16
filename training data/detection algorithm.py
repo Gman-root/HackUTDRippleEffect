@@ -7,12 +7,14 @@ import os
 def detect_hydrate(file_path):
     df = pd.read_csv(file_path)
     df['Hydrate'] = False
-    df.loc[((df['Inj Gas Meter Volume Instantaneous'] < .5*df['Inj Gas Meter Volume Setpoint']) & (df['Inj Gas Valve Percent Open'] > 80) |
+    df.loc[((df['Inj Gas Meter Volume Instantaneous'] < .7*df['Inj Gas Meter Volume Setpoint']) |
     (df['Inj Gas Meter Volume Instantaneous'] < .90*df['Inj Gas Meter Volume Setpoint']) & (df['Inj Gas Valve Percent Open'] > 95)),
     'hydrate']  = True
     hydrate_flagged_data = file_path.replace("cleaned data", "hydrate flagged data")
     os.makedirs(os.path.dirname(hydrate_flagged_data), exist_ok=True)
     df.to_csv(hydrate_flagged_data, index=False)
+
+   
 
 def detect_all_hydrate(directory):
         for filename in os.listdir(directory):
