@@ -1,19 +1,16 @@
 import pandas as pd
 import os
 
-def process_historical_data(train_directory):
-    data_frames = []
-    for filename in os.listdir(train_directory):
-        if filename.endswith(".csv"):
-            file_path = os.path.join(train_directory, filename)
-            df = pd.read_csv(file_path, parse_dates=['Time'])
-            data_frames.append(df)
-    if data_frames:
-        return pd.concat(data_frames)
-    else:
-        return pd.DataFrame()
-
-def detect_hydrate(file_path, historical_data=None):
+def detect_hydrate(file_path):
+    """
+    Detects hydrate formation based on deviations in the data.
+    
+    Args:
+    - file_path (str): Path to the CSV file to process.
+    
+    Saves:
+    - A new CSV file with hydrate flags and severity levels.
+    """
     try:
         # Define the date format
         date_format = '%m/%d/%Y %I:%M:%S %p'
@@ -42,11 +39,20 @@ def detect_hydrate(file_path, historical_data=None):
         df['rolling_mean'] = df['deviation'].rolling(window=window_size).mean()
         df['rolling_std'] = df['deviation'].rolling(window=window_size).std()
         
-        # Dynamic threshold based on historical data
-        if historical_data is not None and not historical_data.empty:
-            threshold = historical_data['rolling_std'].mean() * 2
-        else:
-            threshold = 10  # Default threshold if no historical data is available
+        # Ensure rolling_std is calculated correctly
+        if df['rolling_std'].isnull().all():
+            raise ValueError("Failed to calculate rolling_std. Check the data.")
+        
+        # Ensure rolling_std is not empty
+        if df['rolling_std'].dropna().empty:
+            raise ValueError("rolling_std is empty. Check the data.")
+        
+        # Ensure rolling_std has enough non-null values
+        if df['rolling_std'].notnull().sum() < window_size:
+            raise ValueError("Not enough non-null values in rolling_std. Check the data.")
+        
+        # Static threshold
+        threshold = 10
         
         df['dynamic_threshold'] = threshold
         
@@ -61,6 +67,10 @@ def detect_hydrate(file_path, historical_data=None):
 
             # Check for oscillation around the set line
             oscillating = rolling_std < dynamic_threshold
+            
+            # Ensure rolling_std is not NaN
+            if pd.isna(rolling_std):
+                continue
             
             if hydrate_active:
                 if oscillating:
@@ -93,26 +103,32 @@ def detect_hydrate(file_path, historical_data=None):
         os.makedirs(os.path.dirname(train_file_path), exist_ok=True)
         df.to_csv(train_file_path, index=False)
         print(f"Successfully processed and saved: {train_file_path}")
+    except ValueError as ve:
+        print(f"Value error processing {file_path}: {ve}")
+    except FileNotFoundError as fnfe:
+        print(f"File not found: {file_path}")
     except Exception as e:
         print(f"Failed to process {file_path}: {e}")
 
-def process_all_csvs(directory, historical_data=None):
+def process_all_csvs(directory):
+    """
+    Processes all CSV files in the given directory and applies hydrate detection.
+    
+    Args:
+    - directory (str): Path to the directory containing the CSV files.
+    """
     if not os.path.exists(directory):
         print(f"Directory {directory} does not exist.")
         return
     for filename in os.listdir(directory):
         if filename.endswith(".csv"):
             file_path = os.path.join(directory, filename)
-            detect_hydrate(file_path, historical_data)
+            detect_hydrate(file_path)
 
 def main():
-    # Load and process historical data
-    historical_data_directory = os.path.join(os.path.dirname(__file__), "../train data")
-    historical_data = process_historical_data(historical_data_directory)
-    
     # Process all CSV files in the cleaned data directory
     cleaned_data_directory = os.path.join(os.path.dirname(__file__), "../cleaned data")
-    process_all_csvs(cleaned_data_directory, historical_data=historical_data)
+    process_all_csvs(cleaned_data_directory)
 
 if __name__ == "__main__":
     main()

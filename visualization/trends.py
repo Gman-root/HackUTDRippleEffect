@@ -9,11 +9,12 @@ def plot_trends(file_path):
     
     # Define set points
     deviation_set_point = 0.0
+    inj_gas_meter_volume_set_point = df['Inj Gas Meter Volume Setpoint'].iloc[0]  # Read set point from CSV
 
     severity_colors = {'high': 'red', 'medium': 'orange', 'none': 'green'}
 
     # Plot the data
-    fig, axs = plt.subplots(3, 1, figsize=(12, 18))
+    fig, axs = plt.subplots(4, 1, figsize=(14, 24), constrained_layout=True)  # Adjusted for 4 subplots with constrained layout
     fig.suptitle(os.path.basename(file_path), fontsize=16)  # Set the figure title to the CSV file name
 
     # Plot ratio
@@ -26,7 +27,7 @@ def plot_trends(file_path):
     axs[0].set_xlabel('Time', fontsize=12)
     axs[0].set_ylabel('Ratio', fontsize=12)
     axs[0].set_title('Ratio Over Time', fontsize=14)
-    axs[0].legend()
+    axs[0].legend(loc='upper right')
 
     # Plot deviation
     axs[1].plot(df['Time'], df['deviation'], label='Deviation')
@@ -39,7 +40,7 @@ def plot_trends(file_path):
     axs[1].set_xlabel('Time', fontsize=12)
     axs[1].set_ylabel('Deviation', fontsize=12)
     axs[1].set_title('Deviation Over Time', fontsize=14)
-    axs[1].legend()
+    axs[1].legend(loc='upper right')
 
     # Plot Inj Gas Valve Percent Open
     axs[2].plot(df['Time'], df['Inj Gas Valve Percent Open'], label='Inj Gas Valve Percent Open')
@@ -49,11 +50,23 @@ def plot_trends(file_path):
             color = severity_colors.get(severity, 'blue')
             axs[2].scatter(severity_df['Time'][severity_df['hydrate_flag']], severity_df['Inj Gas Valve Percent Open'][severity_df['hydrate_flag']], label=f'Severity: {severity}', color=color)
     axs[2].set_xlabel('Time', fontsize=12)
-    axs[2].set_ylabel('Inj Gas Valve Percent Open', fontsize=12)
+    axs[2].set_ylabel('Valve Percent Open', fontsize=12)
     axs[2].set_title('Inj Gas Valve Percent Open Over Time', fontsize=14)
-    axs[2].legend()
+    axs[2].legend(loc='upper right')
 
-    plt.tight_layout(rect=[0, 0, 1, 0.96])  # Adjust layout to make room for the title
+    # Plot Inj Gas Meter Volume Instantaneous
+    axs[3].plot(df['Time'], df['Inj Gas Meter Volume Instantaneous'], label='Inj Gas Meter Volume Instantaneous')
+    if 'hydrate_flag' in df.columns:
+        for severity in df['severity'].unique():
+            severity_df = df[df['severity'] == severity]
+            color = severity_colors.get(severity, 'blue')
+            axs[3].scatter(severity_df['Time'][severity_df['hydrate_flag']], severity_df['Inj Gas Meter Volume Instantaneous'][severity_df['hydrate_flag']], label=f'Severity: {severity}', color=color)
+    axs[3].axhline(y=inj_gas_meter_volume_set_point, color='green', linestyle='--', label='Set Point')  # New set point line
+    axs[3].set_xlabel('Time', fontsize=12)
+    axs[3].set_ylabel('Volume Instantaneous', fontsize=12)
+    axs[3].set_title('Inj Gas Meter Volume Instantaneous Over Time', fontsize=14)
+    axs[3].legend(loc='upper right')
+
     plt.show()
 
 def main():
