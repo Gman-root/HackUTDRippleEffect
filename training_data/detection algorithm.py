@@ -6,6 +6,8 @@ import os
 
 def detect_hydrate(file_path):
     df = pd.read_csv(file_path)
+    df.fillna(method='bfill', inplace=True)
+    df.fillna(method='ffill', inplace=True)
     df['Hydrate'] = False
     df.loc[((df['Inj Gas Meter Volume Instantaneous'] < .7*df['Inj Gas Meter Volume Setpoint']) |
     (df['Inj Gas Meter Volume Instantaneous'] < .90*df['Inj Gas Meter Volume Setpoint']) & (df['Inj Gas Valve Percent Open'] > 95)),
