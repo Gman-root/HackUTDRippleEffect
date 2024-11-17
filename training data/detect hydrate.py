@@ -24,12 +24,23 @@ def detect_hydrate(file_path):
             if col not in df.columns:
                 raise ValueError(f"Missing required column: {col}")
         
-        df.loc[(df['Inj Gas Meter Volume Instantaneous'] < .7*df['Inj Gas Meter Volume Setpoint'])
-               | ((df['Inj Gas Meter Volume Instantaneous'] < .9*df['Inj Gas Meter Volume Setpoint']) & df['Inj Gas Valve Percent Open'] > .9), 'hydrate_flag'] = True
-        df.loc[(df['Inj Gas Meter Volume Instantaneous'] < .7*df['Inj Gas Meter Volume Setpoint'])
-               | ((df['Inj Gas Meter Volume Instantaneous'] < .9*df['Inj Gas Meter Volume Setpoint']) & df['Inj Gas Valve Percent Open'] > .9), 'severity'] = "medium"
-        df.loc[(df['Inj Gas Meter Volume Instantaneous'] < .5*df['Inj Gas Meter Volume Setpoint'])
-               | ((df['Inj Gas Meter Volume Instantaneous'] < .75*df['Inj Gas Meter Volume Setpoint']) & df['Inj Gas Valve Percent Open'] > .9), 'severity'] = "high"
+        df['hydrate_flag'] = False  # Initialize hydrate_flag to False for all rows
+        df['severity'] = 'none'  # Initialize severity to 'low' by default
+
+        # Then apply the conditions for setting the values
+        condition = (
+            (df['Inj Gas Meter Volume Instantaneous'] < .7 * df['Inj Gas Meter Volume Setpoint']) |
+            ((df['Inj Gas Meter Volume Instantaneous'] < .9 * df['Inj Gas Meter Volume Setpoint']) & (df['Inj Gas Valve Percent Open'] > .9))
+        )
+        df.loc[condition, 'hydrate_flag'] = True
+        df.loc[condition, 'severity'] = 'medium'
+
+        # Apply severity for high risk
+        high_condition = (
+            (df['Inj Gas Meter Volume Instantaneous'] < .5 * df['Inj Gas Meter Volume Setpoint']) |
+            ((df['Inj Gas Meter Volume Instantaneous'] < .75 * df['Inj Gas Meter Volume Setpoint']) & (df['Inj Gas Valve Percent Open'] > .9))
+        )
+        df.loc[high_condition, 'severity'] = 'high'
 
         # Save the data with hydrate flag and severity
         train_file_path = file_path.replace("cleaned data", "train data")
