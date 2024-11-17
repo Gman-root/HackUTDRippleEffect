@@ -11,9 +11,12 @@ def clean_csv(file_path):
         # Calculate the deviation from the setpoint
         df['deviation'] = df['Inj Gas Meter Volume Instantaneous'] - df['Inj Gas Meter Volume Setpoint']
         
+        # Calculate the ratio of Inj Gas Meter Volume Instantaneous to Inj Gas Valve Percent Open
+        df['ratio'] = df['Inj Gas Meter Volume Instantaneous'] / df['Inj Gas Valve Percent Open']
+        
         # Reorder columns
         columns_order = ['Time', 'Inj Gas Meter Volume Instantaneous', 'Inj Gas Meter Volume Setpoint', 
-                         'Inj Gas Valve Percent Open', 'deviation']
+                         'Inj Gas Valve Percent Open', 'deviation', 'ratio']
         df = df[columns_order]
         
         # Save the cleaned data
