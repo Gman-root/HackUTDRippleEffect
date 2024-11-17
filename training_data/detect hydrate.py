@@ -17,7 +17,8 @@ def detect_hydrate(file_path):
         
         # Read the CSV file with the specified date format
         df = pd.read_csv(file_path, parse_dates=['Time'], date_format=date_format)
-        
+        df.fillna(method='bfill', inplace=True)
+        df.fillna(method='ffill', inplace=True)
         # Check for required columns
         required_columns = ['deviation', 'Inj Gas Valve Percent Open']
         for col in required_columns:
