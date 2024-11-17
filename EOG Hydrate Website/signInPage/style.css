@@ -19,3 +19,9 @@
     --space-xs: 8px;
 }
 
+.error-message {
+    color: red;
+    font-size: 0.9rem;
+    margin-top: 10px;
+    display: none; 
+}
