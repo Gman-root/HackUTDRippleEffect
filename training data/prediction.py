@@ -5,6 +5,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, classification_report
 from tkinter import Tk
 from tkinter import filedialog
+import joblib
 
 
 def predictHydrate(filename, directory):
@@ -17,13 +18,12 @@ def predictHydrate(filename, directory):
     df['rate_of_change'] = df['Inj Gas Meter Volume Instantaneous'].diff().fillna(0)
 
     features = ['Inj Gas Meter Volume Instantaneous', 'Inj Gas Meter Volume Setpoint', 'Inj Gas Valve Percent Open', 'volume_diff', 'rate_of_change']
-    target = ['hydrate_flag', 'severity']
-
+    target = ['hydrate_flag']
     # Splitting the dataset into training and testing
     X = df[features]
     y = df[target]
     X_train = X
-    y_train = y
+    y_train = y.values.ravel()
     unknown = pd.read_csv(filename)
     unknown['volume_diff'] = unknown['Inj Gas Meter Volume Setpoint'] - unknown['Inj Gas Meter Volume Instantaneous']
     unknown['rate_of_change'] = unknown['Inj Gas Meter Volume Instantaneous'].diff().fillna(0)
@@ -34,10 +34,10 @@ def predictHydrate(filename, directory):
     # Initializing the model
     model = RandomForestClassifier(random_state=42)
     model.fit(X_train, y_train)
-
+    #joblib.dump(model, "./random_forest.joblib")
     # Predictions on the test set
     predictions = model.predict(X_test) 
-    unknown[target] = predictions
+    unknown['hydrate_flag'] =  predictions
     # Evaluate model performance
 
 def main():
