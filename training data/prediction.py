@@ -17,7 +17,7 @@ def predictHydrate(filename, directory):
     df['rate_of_change'] = df['Inj Gas Meter Volume Instantaneous'].diff().fillna(0)
 
     features = ['Inj Gas Meter Volume Instantaneous', 'Inj Gas Meter Volume Setpoint', 'Inj Gas Valve Percent Open', 'volume_diff', 'rate_of_change']
-    target = 'hydrate_flag'
+    target = ['hydrate_flag', 'severity']
 
     # Splitting the dataset into training and testing
     X = df[features]
