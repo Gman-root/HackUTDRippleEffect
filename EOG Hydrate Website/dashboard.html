@@ -9,30 +9,66 @@
 <body>
     <header>
         <h1>Pipelines</h1>
+    </br>
+</br>
         <button class="logout-button">Log Out</button>
     </header>
     <div class="container">
         <div class="image-container">
             <h2>Pipeline 1</h2>
-            <img src="images/Bold_744H-10_31-11_07.png" alt="Pipeline 1">
+            <img src="images/Bold_744H-10_31-11_07preview.png" alt="Pipeline 1">
         </div>
         <div class="image-container">
             <h2>Pipeline 2</h2>
-            <img src="images/Courageous_729H-09_25-09_28.png" alt="Pipeline 2">
+            <img src="images/Courageous_729H-09_25-09_28preview.png" alt="Pipeline 2">
         </div>
         <div class="image-container">
             <h2>Pipeline 3</h2>
-            <img src="images/Fearless_709H-10_31-11_07.png" alt="Pipeline 3">
+            <img src="images/Fearless_709H-10_31-11_07preview.png" alt="Pipeline 3">
+        </div>
+        <div class="image-container">
+            <h2>Pipeline 4</h2>
+            <img src="images/Gallant_102H-10_04-10_11preview.png" alt="Pipeline 4">
+        </div>
+        <div class="image-container">
+            <h2>Pipeline 5</h2>
+            <img src="images/Noble_4H-10_24-10_29preview.png" alt="Pipeline 5">
+        </div>
+        <div class="image-container">
+            <h2>Pipeline 6</h2>
+            <img src="images/Resolute_728H-10_14-10_21preview.png" alt="Pipeline 6">
+        </div>
+        <div class="image-container">
+            <h2>Pipeline 7</h2>
+            <img src="images/Ruthless_745H-10_01-10_08preview.png" alt="Pipeline 7">
+        </div>
+        <div class="image-container">
+            <h2>Pipeline 8</h2>
+            <img src="images/Steadfast_505H-10_30-11_07preview.png" alt="Pipeline 8">
+        </div>
+        <div class="image-container">
+            <h2>Pipeline 9</h2>
+            <img src="images/Valiant_505H-09_22-09_30preview.png" alt="Pipeline 9">
         </div>
         <!-- Add more image containers as needed -->
     </div>
     <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: black;
+            display: flex;
+            justify-content: center;
+        }
+
         .container {
+            background-color: rgb(0, 0, 0);
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 20px;
             padding: 20px;
+            width: 75%;
         }
 
         .image-container {
@@ -40,11 +76,13 @@
         }
 
         .image-container img {
-            width: 75%;
+            width: 100%;
             display: block;
-            margin: 0 auto;
+            margin: 20px;
             object-fit: cover;
             object-position: top;
+            border-left: 2px solid black;
+            border-right: 2px solid black;
         }
     </style>
 </body>

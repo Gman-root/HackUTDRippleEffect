@@ -5,6 +5,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, classification_report
 from tkinter import Tk
 from tkinter import filedialog
+from numpy import ndarray
 
 
 def predictHydrate(filename, directory):
@@ -17,8 +18,7 @@ def predictHydrate(filename, directory):
     df['rate_of_change'] = df['Inj Gas Meter Volume Instantaneous'].diff().fillna(0)
 
     features = ['Inj Gas Meter Volume Instantaneous', 'Inj Gas Meter Volume Setpoint', 'Inj Gas Valve Percent Open', 'volume_diff', 'rate_of_change']
-    target = ['hydrate_flag', 'severity']
-
+    target = ['hydrate_flag']
     # Splitting the dataset into training and testing
     X = df[features]
     y = df[target]
@@ -37,7 +37,7 @@ def predictHydrate(filename, directory):
 
     # Predictions on the test set
     predictions = model.predict(X_test) 
-    unknown[target] = predictions
+    unknown['hydrate_flag'] =  predictions
     # Evaluate model performance
 
 def main():
