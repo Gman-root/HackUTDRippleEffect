@@ -9,6 +9,8 @@ struct UploadDataSet: View {
     @State private var selectedFileName: String = ""
     @State private var successMessage: String?
 
+    let serverURL = "http://127.0.0.1:5000/upload_csv" // Update with your hostname address
+
     var body: some View {
         VStack(spacing: 20) {
             Button(action: {
@@ -48,7 +50,7 @@ struct UploadDataSet: View {
             TextEditor(text: $csvContent)
                 .padding()
                 .border(Color.gray, width: 1)
-                .frame(minHeight: 300)  // Adjust height for better display
+                .frame(minHeight: 300)
         }
         .padding()
     }
@@ -63,8 +65,35 @@ struct UploadDataSet: View {
                 let data = try Data(contentsOf: selectedFile)
                 csvContent = String(data: data, encoding: .utf8) ?? "Unable to read file"
 
-                // Send the file to the web server API
-                uploadCSV(data: data)
+                // Replace null values with the mean of the respective column
+                var rows = csvContent.split(separator: "\n").map { $0.split(separator: ",") }
+                let columnCount = rows.first?.count ?? 0
+                var columnSums = [Double](repeating: 0.0, count: columnCount)
+                var columnCounts = [Int](repeating: 0, count: columnCount)
+
+                for row in rows {
+                    for (index, value) in row.enumerated() {
+                        if let doubleValue = Double(value) {
+                            columnSums[index] += doubleValue
+                            columnCounts[index] += 1
+                        }
+                    }
+                }
+
+                let columnMeans = columnSums.enumerated().map { $0.element / Double(columnCounts[$0.offset]) }
+
+                for i in 0..<rows.count {
+                    for j in 0..<rows[i].count {
+                        if rows[i][j].isEmpty {
+                            rows[i][j] = Substring(String(columnMeans[j]))
+                        }
+                    }
+                }
+
+                csvContent = rows.map { $0.joined(separator: ",") }.joined(separator: "\n")
+
+                // Upload the CSV file
+                uploadCSV(data: Data(csvContent.utf8))
             }
         } catch {
             errorMessage = "Error reading file: \(error.localizedDescription)"
@@ -72,7 +101,7 @@ struct UploadDataSet: View {
     }
 
     private func uploadCSV(data: Data) {
-        guard let url = URL(string: "http://your-webserver-url/upload_csv") else { return }
+        guard let url = URL(string: serverURL) else { return }
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
 
