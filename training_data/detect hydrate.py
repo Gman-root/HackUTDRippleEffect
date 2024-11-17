@@ -19,6 +19,8 @@ def detect_hydrate(file_path):
         df = pd.read_csv(file_path, parse_dates=['Time'], date_format=date_format)
         df.fillna(method='bfill', inplace=True)
         df.fillna(method='ffill', inplace=True)
+        # Find the first non-null value in 'Inj Gas Meter Volume Setpoint' and fill the rest of the column with that value
+        
         # Check for required columns
         required_columns = ['deviation', 'Inj Gas Valve Percent Open']
         for col in required_columns:
@@ -45,6 +47,29 @@ def detect_hydrate(file_path):
 
         # Save the data with hydrate flag and severity
         train_file_path = file_path.replace("cleaned data", "train data")
+        log_path = train_file_path.replace(".csv", ".log")
+        log = open(log_path, "w")
+        currentlyHydrated = False
+        detectedSeverity = "none"
+        for index, row in df.iterrows():
+            if(currentlyHydrated == True):
+                if row['severity'] == "high":
+                    detectedSeverity = "Severe"
+                elif (row['severity'] == "Medium" and detectedSeverity != "Sever"):
+                    detectedSeverity = "medium" 
+            if currentlyHydrated == False and row['hydrate_flag'] == True:
+                
+                currentlyHydrated = True
+                if(currentlyHydrated == True):
+                    if row['severity'] == "high":
+                        detectedSeverity = "Severe"
+                    elif (row['severity'] == "Medium" and detectedSeverity != "Sever"):
+                        detectedSeverity = "medium"
+                log.write(detectedSeverity + " hydrate formation detected at " + str(row['Time']) + "\n")
+            elif currentlyHydrated == True and row['hydrate_flag'] == False:
+                log.write(detectedSeverity + " hydrate formation ended at " + str(row['Time']) + "\n")
+                currentlyHydrated = False
+        log.close()
         os.makedirs(os.path.dirname(train_file_path), exist_ok=True)
         df.to_csv(train_file_path, index=False)
         print(f"Successfully processed and saved: {train_file_path}")
