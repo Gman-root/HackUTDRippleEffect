@@ -38,6 +38,8 @@ def predictHydrate(filename, directory):
     # Predictions on the test set
     predictions = model.predict(X_test) 
     unknown['hydrate_flag'] =  predictions
+    os.makedirs(os.path.dirname(filename.replace("train data", "prediction")), exist_ok=True)
+    unknown.to_csv(filename.replace("train data", "prediction"), index=False)
     # Evaluate model performance
 
 def main():
