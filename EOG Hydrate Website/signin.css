@@ -1,0 +1,153 @@
+.container-xs {
+    max-width: 1399px;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.ui-heading {
+    color: #1e1e1e;
+    font-family: Inter, sans-serif;
+    font-weight: 400;
+}
+
+.sign-in {
+    background-color: var(--white-a700);
+    width: 100%;
+}
+
+.form-login {
+    padding: 14px;
+    gap: 14px;
+    background-color: var(--white-a700);
+    display: flex;
+    flex-direction: column;
+    border-radius: var(--radius-xs);
+    border: 1px solid var(--blue-gray-100);
+}
+
+.column-label {
+    margin-top: 8px;
+    padding: 24px;
+    gap: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.input-field {
+    gap: var(--space-xs);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+}
+
+.ui-input {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: text;
+    border-radius: var(--radius-xs);
+    border: 0.5px solid var(--blue-gray-100);
+}
+
+.ui-input.white-a700 {
+    background-color: var(--white-a700);
+    color: var(--gray-600);
+}
+
+.ui-input.size-xs {
+    height: 40px;
+    padding: 12px;
+}
+
+.email, .password {
+    width: 100%;
+    height: 40px;
+    padding-left: 12px;
+    padding-right: 12px;
+    border-radius: 8px;
+    border: 0.5px solid var(--blue-gray-100);
+    background-color: var(--white-a700);
+}
+
+.ui-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    text-align: center;
+    font-size: 16px;
+    border-radius: var(--radius-xs);
+}
+
+.ui-button.fill {
+    color: var(--gray-100);
+    background-color: var(--blue-gray-900);
+}
+
+.ui-button.size-xs {
+    height: 40px;
+    padding: 0 33px;
+}
+
+.register-btn {
+    margin-left: 30px;
+    min-width: 86px;
+}
+
+.cancel-btn {
+    margin-left: 36px;
+    display: flex;
+    padding: var(--space-xs);
+    border-radius: var(--radius-xs);
+}
+
+.cancel-text {
+    color: var(--blue-gray-900);
+}
+
+.row-forgot {
+    padding: 24px;
+    display: flex;
+    align-items: center;
+}
+
+.forgot-password {
+    color: #1e1e1e;
+    font-size: 16px;
+    text-decoration: underline;
+}
+
+@media only screen and (max-width: 550px) {
+    .column-label {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    .ui-button.size-xs {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+}
+
+h1, h2, h3, p, button, .ui-input {
+    border: 2px solid var(--blue_gray_100);
+    padding: 4px;
+}
+
+.forgot-password {
+    border: none;
+}
+
+.forgot-password {
+    color: #1e1e1e;
+    text-decoration: underline;
+    font-size: 16px;
+}
+
+.register-btn {
+    background-color: solid black;
+    padding: 8px;
+}
