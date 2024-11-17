@@ -55,7 +55,7 @@ def plot_trends(directory):
         axs[1].set_title('Deviation Over Time', fontsize=14)
         axs[1].legend(loc='upper right')
 
-        # Plot Inj Gas Valve Percent Open
+        #Plot Inj Gas Valve Percent Open
         axs[2].plot(df['Time'], df['Inj Gas Valve Percent Open'], label='Inj Gas Valve Percent Open')
         if 'hydrate_flag' in df.columns:
             for severity in df['severity'].unique():
@@ -66,7 +66,6 @@ def plot_trends(directory):
         axs[2].set_ylabel('Valve Percent Open', fontsize=12)
         axs[2].set_title('Inj Gas Valve Percent Open Over Time', fontsize=14)
         axs[2].legend(loc='upper right')
-
         # Plot Inj Gas Meter Volume Instantaneous
         axs[3].plot(df['Time'], df['Inj Gas Meter Volume Instantaneous'], label='Inj Gas Meter Volume Instantaneous')
         if 'hydrate_flag' in df.columns:
