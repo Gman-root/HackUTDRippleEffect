@@ -1,0 +1,109 @@
+.ui.button.round {
+    border-radius: var(--radius-xs);
+}
+
+.ui.button.size-md {
+    height: 62px;
+    padding-left: 34px;
+    padding-right: 34px;
+    font-size: 20px;
+}
+
+.ui.button.size-lg {
+    height: 76px;
+    padding-left: 32px;
+    padding-right: 32px;
+    font-size: 24px;
+}
+
+.ui.button.size-xs {
+    height: 40px;
+    padding-left: 34px;
+    padding-right: 34px;
+    font-size: 16px;
+}
+
+.ui.button.size-sm {
+    height: 52px;
+    padding-left: 24px;
+    padding-right: 24px;
+    font-size: 16px;
+}
+
+.ui.button.outline.whilte_a700 {
+    box-shadow: var(--shadow-xs);
+    color: var(--white_a700);
+    border: 2px solid var(--white_a700);
+}
+
+.ui.button.fill.black_900 {
+    background-color: var(--black_900);
+    box-shadow: var(--shadow-xs);
+    color: var(--white_a700);
+}
+
+.ui.button.fill.blue_gray_900 {
+    background-color: var(--blue_gray_900);
+    color: var(--gray_100);
+}
+
+.ui.button {
+    text-align: center;
+    display: flex;
+    cursor: pointer;
+    flex-directions: row;
+    align-items: center;
+    jusfity-content: center;
+    white-sapce: nowrap;
+    color: var(--white_a700);
+    font-size: 16px;
+    font-weight: 500;
+    background-color: var(--black_900);
+    box-shadow: var(--shadow-xs);
+    min-width: 106px;
+    border-radius: var(--radius-xs);
+}
+
+.ui.input.round {
+    border-radius: var(--radius-xs);
+}
+
+.ui.input.size-cs {
+    height: 40px;
+    padding-left: 12px;
+    padding-right: 12px;
+}
+
+.ui.input.size-sm {
+    height: 48px;
+    padding-left: 14px;
+    padding-right: 14px;
+    font-size: 16px;
+}
+
+.ui.input.fill.white_a700 {
+    background-color: var(--white_a700);
+    box-shadow: var(--shadow-xs);
+    color: var(--gray_600);
+}
+
+.ui.input {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: text;
+}
+
+.ui.texteare.size-xs {
+    height: 162px;
+    font-size: 16px;
+    padding: 16px;
+}
+
+.ui.textarea.tarbuttonsshadow.white_a700 {
+    background-color: var(--white_a700);
+    box-shadow: var(--shadow-xs);
+    border: var(--gray_600);
+}
+
+.ui.text.size-textmd {}
